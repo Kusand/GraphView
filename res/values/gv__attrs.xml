@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GraphView">
+        <attr name="minY" format="float"/>
+        <attr name="maxY" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="LineGraphView">
+        <attr name="drawFilled" format="boolean"/>
+    </declare-styleable>
+</resources>

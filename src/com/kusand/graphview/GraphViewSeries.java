@@ -1,4 +1,4 @@
-package com.jjoe64.graphview;
+package com.kusand.graphview;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import android.annotation.TargetApi;
 
-import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.kusand.graphview.GraphView.GraphViewData;
 
 public class GraphViewSeries {
 	/**

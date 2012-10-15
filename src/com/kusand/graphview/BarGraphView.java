@@ -1,18 +1,28 @@
-package com.jjoe64.graphview;
+package com.kusand.graphview;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 
 /**
  * Draws a Bar Chart
  * @author Muhammad Shahab Hameed
  */
 public class BarGraphView extends GraphView {
-	public BarGraphView(Context context, String title) {
-		super(context, title);
-	}
 
-	@Override
+    public BarGraphView(Context context) {
+        super(context);
+    }
+
+    public BarGraphView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public BarGraphView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    @Override
 	public void drawSeries(Canvas canvas, GraphViewData[] values, float graphwidth, float graphheight,
 			float border, double minX, double minY, double diffX, double diffY,
 			float horstart) {
