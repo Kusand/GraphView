@@ -4,22 +4,52 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kusand</groupId>
-    <artifactId>GraphView</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>apklib</packaging>
+    <groupId>com.kusand.graphview</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android</artifactId>
-            <scope>provided</scope>
-            <version>4.1.1.4</version>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>library</module>
+        <module>sample</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <name>Eric Schrag</name>
+            <email>eschrag@gmail.com</email>
+            <id>Kusand</id>
+            <timezone>-5</timezone>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <java.version>1.6</java.version>
+        <android.version>4.1.1.4</android.version>
+        <android.platform>16</android.platform>
+        <android.support.version>r7</android.support.version>
+
+        <android-maven.version>3.3.0</android-maven.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>android</artifactId>
+                <version>${android.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>library/src</sourceDirectory>
 
         <plugins>
             <plugin>

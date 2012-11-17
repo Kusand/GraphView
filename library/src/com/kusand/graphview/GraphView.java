@@ -266,7 +266,9 @@ public abstract class GraphView extends View {
     private double manualMaxYValue;
     private double manualMinYValue;
 
-
+    public void setTitle(String newTitle) {
+        title = newTitle;
+    }
 
     private GraphViewData[] _values(int idxSeries) {
         GraphViewData[] values = graphSeries.get(idxSeries).values;
