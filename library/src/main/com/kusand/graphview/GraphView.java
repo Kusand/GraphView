@@ -16,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.kusand.graphview.compatible.ScaleGestureDetector;
+import com.kusand.graphview.labels.DefaultLabelGenerator;
+import com.kusand.graphview.labels.LabelGenerator;
 
 /**
  * GraphView is a Android View for creating zoomable and scrollable graphs.
@@ -32,6 +34,12 @@ public abstract class GraphView extends View {
 
     private Float minY;
     private Float maxY;
+
+
+    // Label generation
+    LabelGenerator horizontalLabelGenerator = new DefaultLabelGenerator(GraphViewConfig.VERTICAL_LABEL_WIDTH);
+    LabelGenerator verticalLabelGenerator = new DefaultLabelGenerator(GraphViewConfig.HORIZONTAL_LABEL_HEIGHT);
+
 
     protected GraphView(Context context) {
         super(context);
@@ -241,10 +249,12 @@ public abstract class GraphView extends View {
         // vertical labels
         paint.setTextAlign(Align.LEFT);
         int vers = verlabels.length - 1;
-        for (int i = 0; i < verlabels.length; i++) {
-            float y = ((graphheight / vers) * i) + border;
+        // draw from top to bottom
+        for (int i = 1; i <= verlabels.length; i++) {
+            int labelIdx = verlabels.length - i;
+            float y = ((graphheight / vers) * labelIdx) + border;
             paint.setColor(Color.WHITE);
-            canvas.drawText(verlabels[i], 0, y, paint);
+            canvas.drawText(verlabels[i-1], 0, y, paint);
         }
     }
 
@@ -370,25 +380,19 @@ public abstract class GraphView extends View {
     }
 
     private String[] generateHorlabels(float graphwidth) {
-        int numLabels = (int) (graphwidth/GraphViewConfig.VERTICAL_LABEL_WIDTH);
-        String[] labels = new String[numLabels+1];
-        double min = getMinX(false);
-        double max = getMaxX(false);
-        for (int i=0; i<=numLabels; i++) {
-            labels[i] = formatLabel(min + ((max-min)*i/numLabels), true);
-        }
-        return labels;
+        return horizontalLabelGenerator.generateLabels(graphwidth, getMinX(false), getMaxX(false));
     }
 
     synchronized private String[] generateVerlabels(float graphheight) {
-        int numLabels = (int) (graphheight/GraphViewConfig.HORIZONTAL_LABEL_HEIGHT);
-        String[] labels = new String[numLabels+1];
-        double min = getMinY();
-        double max = getMaxY();
-        for (int i=0; i<=numLabels; i++) {
-            labels[numLabels-i] = formatLabel(min + ((max-min)*i/numLabels), false);
-        }
-        return labels;
+        return verticalLabelGenerator.generateLabels(graphheight, getMinY(), getMaxY());
+    }
+
+    public void setHorizontalLabelGenerator(LabelGenerator horizontalLabelGenerator) {
+        this.horizontalLabelGenerator = horizontalLabelGenerator;
+    }
+
+    public void setVerticalLabelGenerator(LabelGenerator verticalLabelGenerator) {
+        this.verticalLabelGenerator = verticalLabelGenerator;
     }
 
     public LegendAlign getLegendAlign() {
