@@ -35,10 +35,23 @@ public abstract class GraphView extends View {
     private Float minY;
     private Float maxY;
 
+    /*static final private class GraphViewConfig {
+        static final float BORDER = 20;
+        static final float VERTICAL_LABEL_WIDTH = 100;
+        static final float HORIZONTAL_LABEL_HEIGHT = 80;
+    }*/
+    private float border = 20;
+    private float verticalLabelWidth = 100;
+    private float horizontalLabelHeight = 80;
 
     // Label generation
-    LabelGenerator horizontalLabelGenerator = new DefaultLabelGenerator(GraphViewConfig.VERTICAL_LABEL_WIDTH);
-    LabelGenerator verticalLabelGenerator = new DefaultLabelGenerator(GraphViewConfig.HORIZONTAL_LABEL_HEIGHT);
+    private LabelGenerator horizontalLabelGenerator = new DefaultLabelGenerator(verticalLabelWidth);
+    private LabelGenerator verticalLabelGenerator = new DefaultLabelGenerator(horizontalLabelHeight);
+
+    // Graph coloring
+    private int verticalLabelColor = Color.WHITE;
+    private int horizontalLabelColor = Color.WHITE;
+    private int titleColor = Color.WHITE;
 
 
     protected GraphView(Context context) {
@@ -70,16 +83,28 @@ public abstract class GraphView extends View {
             if(a.hasValue(R.styleable.GraphView_minY)) {
                 minY = a.getFloat(R.styleable.GraphView_minY, Float.MIN_VALUE);
             }
+            if(a.hasValue(R.styleable.GraphView_border)) {
+                border = a.getFloat(R.styleable.GraphView_border, border);
+            }
+            if(a.hasValue(R.styleable.GraphView_verticalLabelWidth)) {
+                verticalLabelWidth = a.getFloat(R.styleable.GraphView_verticalLabelWidth, verticalLabelWidth);
+            }
+            if(a.hasValue(R.styleable.GraphView_horizontalLabelHeight)) {
+                horizontalLabelHeight = a.getFloat(R.styleable.GraphView_horizontalLabelHeight, horizontalLabelHeight);
+            }
+            if(a.hasValue(R.styleable.GraphView_verticalLabelColor)) {
+                verticalLabelColor = a.getColor(R.styleable.GraphView_verticalLabelColor, Color.WHITE);
+            }
+            if(a.hasValue(R.styleable.GraphView_horizontalLabelColor)) {
+                horizontalLabelColor = a.getColor(R.styleable.GraphView_horizontalLabelColor, Color.WHITE);
+            }
+            if(a.hasValue(R.styleable.GraphView_titleColor)) {
+                titleColor = a.getColor(R.styleable.GraphView_titleColor, Color.WHITE);
+            }
         }
         finally {
             a.recycle();
         }
-    }
-
-    static final private class GraphViewConfig {
-        static final float BORDER = 20;
-        static final float VERTICAL_LABEL_WIDTH = 100;
-        static final float HORIZONTAL_LABEL_HEIGHT = 80;
     }
 
     private float lastTouchEventX;
@@ -100,7 +125,6 @@ public abstract class GraphView extends View {
         // normal
         paint.setStrokeWidth(0);
 
-        float border = GraphViewConfig.BORDER;
         float horstart = 50;
         float height = getHeight();
         float width = getWidth() - 1;
@@ -140,11 +164,12 @@ public abstract class GraphView extends View {
                 paint.setTextAlign(Align.RIGHT);
             if (i==0)
                 paint.setTextAlign(Align.LEFT);
-            paint.setColor(Color.WHITE);
+            paint.setColor(horizontalLabelColor);
             canvas.drawText(horlabels[i], x, height - 4, paint);
         }
 
         paint.setTextAlign(Align.CENTER);
+        paint.setColor(titleColor);
         canvas.drawText(title, (graphwidth / 2) + horstart, border - 4, paint);
 
         if (maxY != minY) {
@@ -238,7 +263,6 @@ public abstract class GraphView extends View {
     private void drawLabels(Canvas canvas) {
         paint.setStrokeWidth(0);
 
-        float border = GraphViewConfig.BORDER;
         float height = getHeight();
         float graphheight = height - (2 * border);
 
@@ -253,7 +277,7 @@ public abstract class GraphView extends View {
         for (int i = 1; i <= verlabels.length; i++) {
             int labelIdx = verlabels.length - i;
             float y = ((graphheight / vers) * labelIdx) + border;
-            paint.setColor(Color.WHITE);
+            paint.setColor(verticalLabelColor);
             canvas.drawText(verlabels[i-1], 0, y, paint);
         }
     }
@@ -333,7 +357,7 @@ public abstract class GraphView extends View {
                 lTop = height/2 - legendHeight/2;
                 break;
             default:
-                lTop = height - GraphViewConfig.BORDER - legendHeight -10;
+                lTop = height - border - legendHeight -10;
         }
         float lRight = lLeft+legendWidth;
         float lBottom = lTop+legendHeight;

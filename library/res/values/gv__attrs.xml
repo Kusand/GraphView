@@ -3,6 +3,12 @@
     <declare-styleable name="GraphView">
         <attr name="minY" format="float"/>
         <attr name="maxY" format="float"/>
+        <attr name="border" format="float"/>
+        <attr name="verticalLabelWidth" format="float"/>
+        <attr name="horizontalLabelHeight" format="float"/>
+        <attr name="verticalLabelColor" format="color"/>
+        <attr name="horizontalLabelColor" format="color"/>
+        <attr name="titleColor" format="color"/>
     </declare-styleable>
 
     <declare-styleable name="LineGraphView">
