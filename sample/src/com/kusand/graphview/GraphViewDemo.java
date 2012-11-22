@@ -21,7 +21,8 @@ public class GraphViewDemo extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		LineGraphView graphView = new LineGraphView(this);
+        setContentView(R.layout.default_line_graph);
+		LineGraphView graphView = (LineGraphView) findViewById(R.id.sample_line_graph);
         graphView.setTitle("GraphViewDemo");
 		graphView.addSeries(new GraphViewSeries(new GraphViewData[] {
 				new GraphViewData(1, 2.0d)
@@ -31,6 +32,5 @@ public class GraphViewDemo extends Activity {
 				, new GraphViewData(4, 1.0d)
 				, new GraphViewData(5, 3.0d)
 		}));
-		setContentView(graphView);
 	}
 }
