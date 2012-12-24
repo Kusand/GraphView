@@ -42,7 +42,8 @@ public abstract class GraphView extends View {
         static final float VERTICAL_LABEL_WIDTH = 100;
         static final float HORIZONTAL_LABEL_HEIGHT = 80;
     }*/
-    private float border = 20;
+    private float lowerBorder = 20;
+    private float leftBorder = 50;
     private float verticalLabelWidth = 100;
     private float horizontalLabelHeight = 80;
 
@@ -90,7 +91,7 @@ public abstract class GraphView extends View {
                 minY = a.getFloat(R.styleable.GraphView_minY, Float.MIN_VALUE);
             }
             if(a.hasValue(R.styleable.GraphView_border)) {
-                border = a.getFloat(R.styleable.GraphView_border, border);
+                lowerBorder = a.getFloat(R.styleable.GraphView_border, lowerBorder);
             }
             if(a.hasValue(R.styleable.GraphView_verticalLabelWidth)) {
                 verticalLabelWidth = a.getFloat(R.styleable.GraphView_verticalLabelWidth, verticalLabelWidth);
@@ -134,7 +135,6 @@ public abstract class GraphView extends View {
         // normal
         paint.setStrokeWidth(0);
 
-        float horstart = 50;
         float height = getHeight();
         float width = getWidth() - 1;
         double maxY = getMaxY();
@@ -143,8 +143,8 @@ public abstract class GraphView extends View {
         double maxX = getMaxX(false);
         double minX = getMinX(false);
         double diffX = maxX - minX;
-        float graphheight = height - (2 * border);
-        graphwidth = width;
+        float graphheight = height - (2 * lowerBorder);
+        graphwidth = width - leftBorder;
 
         if (horlabels == null) {
             horlabels = generateHorlabels(graphwidth);
@@ -158,16 +158,16 @@ public abstract class GraphView extends View {
         int vers = verlabels.length - 1;
         for (int i = 0; i < verlabels.length; i++) {
             paint.setColor(Color.DKGRAY);
-            float y = ((graphheight / vers) * i) + border;
-            canvas.drawLine(horstart, y, width, y, paint);
+            float y = ((graphheight / vers) * i) + lowerBorder;
+            canvas.drawLine(leftBorder, y, width, y, paint);
         }
 
         // horizontal labels + lines
         int hors = horlabels.length - 1;
         for (int i = 0; i < horlabels.length; i++) {
             paint.setColor(Color.DKGRAY);
-            float x = ((graphwidth / hors) * i) + horstart;
-            canvas.drawLine(x, height - border, x, border, paint);
+            float x = ((graphwidth / hors) * i) + leftBorder;
+            canvas.drawLine(x, height - lowerBorder, x, lowerBorder, paint);
             paint.setTextAlign(Align.CENTER);
             if (i==horlabels.length-1)
                 paint.setTextAlign(Align.RIGHT);
@@ -179,7 +179,7 @@ public abstract class GraphView extends View {
 
         paint.setTextAlign(Align.CENTER);
         paint.setColor(titleColor);
-        canvas.drawText(title, (graphwidth / 2) + horstart, border - 4, paint);
+        canvas.drawText(title, (graphwidth / 2) + leftBorder, lowerBorder - 4, paint);
 
         if (maxY != minY) {
             paint.setStrokeCap(Paint.Cap.ROUND);
@@ -187,7 +187,7 @@ public abstract class GraphView extends View {
             for (int i=0; i<graphSeries.size(); i++) {
                 paint.setStrokeWidth(graphSeries.get(i).style.thickness);
                 paint.setColor(graphSeries.get(i).style.color);
-                drawSeries(canvas, _values(i), graphwidth, graphheight, border, minX, minY, diffX, diffY, horstart);
+                drawSeries(canvas, _values(i), graphwidth, graphheight, lowerBorder, minX, minY, diffX, diffY, leftBorder);
             }
 
             if (showLegend) drawLegend(canvas, height, width);
@@ -273,7 +273,7 @@ public abstract class GraphView extends View {
         paint.setStrokeWidth(0);
 
         float height = getHeight();
-        float graphheight = height - (2 * border);
+        float graphheight = height - (2 * lowerBorder);
 
         if (verlabels == null) {
             verlabels = generateVerlabels(graphheight);
@@ -285,7 +285,7 @@ public abstract class GraphView extends View {
         // draw from top to bottom
         for (int i = 1; i <= verlabels.length; i++) {
             int labelIdx = verlabels.length - i;
-            float y = ((graphheight / vers) * labelIdx) + border;
+            float y = ((graphheight / vers) * labelIdx) + lowerBorder;
             labelPaint.setColor(verticalLabelColor);
             setLabelPaintSize(verticalLabelTextSize);
             canvas.drawText(verlabels[i-1], 0, y, labelPaint);
@@ -368,7 +368,7 @@ public abstract class GraphView extends View {
                 lTop = height/2 - legendHeight/2;
                 break;
             default:
-                lTop = height - border - legendHeight -10;
+                lTop = height - lowerBorder - legendHeight -10;
         }
         float lRight = lLeft+legendWidth;
         float lBottom = lTop+legendHeight;
