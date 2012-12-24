@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -50,6 +52,7 @@ public abstract class GraphView extends View {
 
     // Graph coloring
     private int verticalLabelColor = Color.WHITE;
+    private int verticalLabelTextSize = 15;
     private int horizontalLabelColor = Color.WHITE;
     private int titleColor = Color.WHITE;
 
@@ -58,6 +61,7 @@ public abstract class GraphView extends View {
         super(context);
 
         paint = new Paint();
+        labelPaint = new Paint();
     }
 
     protected GraphView(Context context, AttributeSet attrs) {
@@ -65,6 +69,7 @@ public abstract class GraphView extends View {
         pullAttributes(context, attrs);
 
         paint = new Paint();
+        labelPaint = new Paint();
     }
 
     protected GraphView(Context context, AttributeSet attrs, int defStyle) {
@@ -72,6 +77,7 @@ public abstract class GraphView extends View {
         pullAttributes(context, attrs);
 
         paint = new Paint();
+        labelPaint = new Paint();
     }
 
     protected void pullAttributes(Context ctx, AttributeSet attrs) {
@@ -94,6 +100,9 @@ public abstract class GraphView extends View {
             }
             if(a.hasValue(R.styleable.GraphView_verticalLabelColor)) {
                 verticalLabelColor = a.getColor(R.styleable.GraphView_verticalLabelColor, Color.WHITE);
+            }
+            if(a.hasValue(R.styleable.GraphView_verticalLabelTextSize)) {
+                verticalLabelTextSize = a.getDimensionPixelSize(R.styleable.GraphView_verticalLabelTextSize, verticalLabelTextSize);
             }
             if(a.hasValue(R.styleable.GraphView_horizontalLabelColor)) {
                 horizontalLabelColor = a.getColor(R.styleable.GraphView_horizontalLabelColor, Color.WHITE);
@@ -277,12 +286,14 @@ public abstract class GraphView extends View {
         for (int i = 1; i <= verlabels.length; i++) {
             int labelIdx = verlabels.length - i;
             float y = ((graphheight / vers) * labelIdx) + border;
-            paint.setColor(verticalLabelColor);
-            canvas.drawText(verlabels[i-1], 0, y, paint);
+            labelPaint.setColor(verticalLabelColor);
+            setLabelPaintSize(verticalLabelTextSize);
+            canvas.drawText(verlabels[i-1], 0, y, labelPaint);
         }
     }
 
     protected final Paint paint;
+    protected final Paint labelPaint;
     private String[] horlabels;
     private String[] verlabels;
     private String title = "";
@@ -669,5 +680,21 @@ public abstract class GraphView extends View {
     public void setViewPort(double start, double size) {
         viewportStart = start;
         viewportSize = size;
+    }
+
+    public void setLabelPaintSize(int dpSize) {
+        Context c = getContext();
+        Resources r;
+
+        if (c == null)
+            r = Resources.getSystem();
+        else
+            r = c.getResources();
+
+        float newSize = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, dpSize, r.getDisplayMetrics());
+        if(newSize != labelPaint.getTextSize()) {
+            labelPaint.setTextSize(newSize);
+        }
     }
 }
