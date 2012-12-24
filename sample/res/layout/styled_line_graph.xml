@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+    <com.kusand.graphview.LineGraphView
+            android:id="@+id/sample_line_graph"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:horizontalLabelColor="#FF0000"
+            app:verticalLabelColor="#0000FF"
+            app:verticalLabelTextSize="4sp"
+            app:titleColor="#00FF00"
+            />
+</LinearLayout>
